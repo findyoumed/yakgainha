@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>약가인하 Excel Processor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        header {
+            background-color: #343a40;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        form {
+            margin-top: 20px;
+        }
+        h2 {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .h2-label {
+            padding: 10px;
+            background-color: #343a40;
+            color: white;
+            border-radius: 5px 0 0 5px;
+        }
+        .h2-text {
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 0 5px 5px 0;
+        }
+        input[type="file"] {
+            margin-top: 10px;
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script>
+        function validateFileExtension(inputElement) {
+            const allowedExtensions = ["xlsx"];
+            const fileName = inputElement.value;
+            const fileExtension = fileName.split('.').pop().toLowerCase();
+
+            if (!allowedExtensions.includes(fileExtension)) {
+                alert("올바른 파일 확장자가 아닙니다. xlsx 파일을 업로드해주세요.");
+                inputElement.value = ""; // Clear the file input
+            }
+        }
+
+        function compareFiles(event) {
+            const yakgaInput = document.querySelector('input[name="yakga"]');
+            const yakgukInput = document.querySelector('input[name="yakguk"]');
+
+            if (!yakgaInput.value || !yakgukInput.value) {
+                event.preventDefault(); // 이벤트의 기본 동작 중단
+                alert("파일을 먼저 선택해주세요.");
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Excel Processor</h1>
+    </header>
+    <div class="container">
+        <form action="/process" method="POST" enctype="multipart/form-data" onsubmit="compareFiles(event)">
+            <h2>
+                <span class="h2-label">심평원 엑셀 파일검색</span>
+                <span class="h2-text">표준코드 위치가 D열</span>
+            </h2>
+            <input type="file" name="yakga" accept=".xlsx" onchange="validateFileExtension(this)">
+            <h2>
+                <span class="h2-label">약국 엑셀 파일검색</span>
+                <span class="h2-text">표준코드 위치가 C열, 재고수량은 G열</span>
+            </h2>
+            <input type="file" name="yakguk" accept=".xlsx" onchange="validateFileExtension(this)">
+            <br><br>
+            <input type="submit" value="비교합니다">
+        </form>
+    </div>
+</body>
+</html>
